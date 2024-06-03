@@ -7,6 +7,7 @@ Auth class
 from flask import request
 from typing import List, TypeVar
 from models.user import User
+import fnmatch
 
 
 class Auth:
@@ -19,6 +20,9 @@ class Auth:
             return True
         if path[-1] != '/':
             path += '/'
+        for excluded_path in excluded_paths:
+            if fnmatch.fnmatch(path, excluded_path):
+                return False
         if path in excluded_paths:
             return False
         return True
@@ -26,7 +30,9 @@ class Auth:
     def authorization_header(self, request=None) -> str:
         """ authorization_header method
         """
-        return None
+        if request is None or request.headers.get('Authorization') is None:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ current_user method
