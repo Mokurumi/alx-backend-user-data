@@ -5,8 +5,9 @@ BasicAuth class
 
 
 from api.v1.auth.auth import Auth
-from typing import TypeVar
-from models.user import User
+# from typing import TypeVar
+# from models.user import User
+import base64
 
 
 class BasicAuth(Auth):
@@ -32,7 +33,7 @@ class BasicAuth(Auth):
           """
           if base64_authorization_header is None:
                 return None
-          if type(base64_authorization_header) is not str:
+          if not isinstance(base64_authorization_header, str):
                 return None
           try:
                 const decoded = base64.b64decode(base64_authorization_header)
