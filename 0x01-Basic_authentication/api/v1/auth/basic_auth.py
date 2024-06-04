@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 """
 BasicAuth class
-Add the method def decode_base64_authorization_header(self, base64_authorization_header: str) -> str: in the class BasicAuth that returns the decoded value of a Base64 string base64_authorization_header:
-
-Return None if base64_authorization_header is None
-Return None if base64_authorization_header is not a string
-Return None if base64_authorization_header is not a valid Base64 - you can use try/except
-Otherwise, return the decoded value as UTF8 string - you can use decode('utf-8')
 """
 
 
@@ -49,3 +43,16 @@ class BasicAuth(Auth):
                 return message
             except binascii.Error:
                 return None
+
+    def extract_user_credentials(self, decoded_base64_authorization_header: str
+                                 ) -> (str, str):
+        """ extract_user_credentials method
+        """
+        if decoded_base64_authorization_header is None:
+            return None, None
+        if type(decoded_base64_authorization_header) is not str:
+            return None, None
+        if ':' not in decoded_base64_authorization_header:
+            return None, None
+        user_credentials = decoded_base64_authorization_header.split(':', 1)
+        return user_credentials[0], user_credentials[1]
