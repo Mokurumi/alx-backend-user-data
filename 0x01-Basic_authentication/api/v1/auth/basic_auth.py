@@ -56,7 +56,7 @@ class BasicAuth(Auth):
             return (None, None)
         user_credentials = decoded_base64_authorization_header.split(':', 1)
         if len(user_credentials) != 2:
-            return (None, None)
+            return (user_credentials[0], "")
         return (user_credentials[0], user_credentials[1])
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str):
