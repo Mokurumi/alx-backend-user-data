@@ -5,7 +5,9 @@ BasicAuth class
 
 
 from api.v1.auth.auth import Auth
+from typing import TypeVar
 from models.user import User
+import base64
 
 
 class BasicAuth(Auth):
@@ -23,6 +25,26 @@ class BasicAuth(Auth):
         if not authorization_header.startswith('Basic '):
             return None
         return authorization_header[6:]
+
+    def decode_base64_authorization_header(self,
+                                           base64_authorization_header: str
+                                           ) -> str:
+        """ decode_base64_authorization_header method
+        """
+        if base64_authorization_header is None:
+            return None
+        if type(base64_authorization_header) is not str:
+            return None
+        try:
+            # return base64_authorization_header.decode('utf-8')
+            # return base64.b64decode(base64_authorization_header).decode('utf-8')
+            res = base64.b64decode(
+                base64_authorization_header,
+                validate=True,
+            )
+            return res.decode('utf-8')
+        except Exception:
+            return None
 
     def extract_user_credentials(self, decoded_base64_authorization_header: str
                                  ) -> (str, str):
@@ -49,7 +71,7 @@ class BasicAuth(Auth):
         users = User.search({'email': user_email})
         if not users:
             return None
-        user = users[0]
-        if not user.is_valid_password(user_pwd):
-            return None
-        return user
+        for user in users:
+            if user.is_valid_password(user_pwd):
+                return user
+        return None
