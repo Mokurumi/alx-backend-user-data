@@ -8,6 +8,7 @@ from api.v1.auth.auth import Auth
 # from typing import TypeVar
 # from models.user import User
 import base64
+import binascii
 
 
 class BasicAuth(Auth):
@@ -36,7 +37,10 @@ class BasicAuth(Auth):
           if not isinstance(base64_authorization_header, str):
                 return None
           try:
-                const decoded = base64.b64decode(base64_authorization_header)
+                const decoded = base64.b64decode(
+                    base64_authorization_header,
+                    validate=True
+                )
                 return decoded.decode('utf-8')
-          except Exception:
+          except (binascii.Error, UnicodeDecodeError):
                 return None
