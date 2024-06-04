@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 """
 BasicAuth class
+Add the method def decode_base64_authorization_header(self, base64_authorization_header: str) -> str: in the class BasicAuth that returns the decoded value of a Base64 string base64_authorization_header:
+
+Return None if base64_authorization_header is None
+Return None if base64_authorization_header is not a string
+Return None if base64_authorization_header is not a valid Base64 - you can use try/except
+Otherwise, return the decoded value as UTF8 string - you can use decode('utf-8')
+
+Add the method def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str) in the class BasicAuth that returns the user email and password from the Base64 decoded value.
+
+This method must return 2 values
+Return None, None if decoded_base64_authorization_header is None
+Return None, None if decoded_base64_authorization_header is not a string
+Return None, None if decoded_base64_authorization_header doesn’t contain :
+Otherwise, return the user email and the user password - these 2 values must be separated by a :
+You can assume decoded_base64_authorization_header will contain only one :
 """
 
 
@@ -32,16 +47,17 @@ class BasicAuth(Auth):
                                            ) -> str:
           """ decode_base64_authorization_header method
           """
-            if base64_authorization_header is None:
-                return None
-            if type(base64_authorization_header) is not str:
-                return None
+            # if base64_authorization_header is None:
+            #     return None
+            # if type(base64_authorization_header) is not str:
+            #     return None
             try:
-                base64_bytes = base64_authorization_header.encode('utf-8')
-                message_bytes = base64.b64decode(base64_bytes)
-                message = message_bytes.decode('utf-8')
-                return message
-            except binascii.Error:
+                str_bytes = base64.b64decode(
+                    base64_authorization_header,
+                    validate=True
+                )
+                return str_bytes.decode('utf-8')
+            except (binascii.Error, UnicodeDecodeError):
                 return None
 
     def extract_user_credentials(self, decoded_base64_authorization_header: str
