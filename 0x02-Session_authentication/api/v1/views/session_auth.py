@@ -38,7 +38,8 @@ def auth_session_login():
     return response
 
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
 def auth_session_logout() -> Tuple:
     """ DELETE /auth_session/logout
     Return:
