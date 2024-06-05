@@ -8,6 +8,7 @@ from flask import request
 from typing import List, TypeVar
 from models.user import User
 import fnmatch
+import os
 
 
 class Auth:
@@ -44,4 +45,4 @@ class Auth:
         """
         if request is None:
             return None
-        return request.cookies.get(getenv('SESSION_NAME'))
+        return request.cookies.get(os.getenv('SESSION_NAME'))
