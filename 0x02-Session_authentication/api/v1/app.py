@@ -2,11 +2,12 @@
 """
 Route module for the API
 """
-from os import getenv
+
+
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-import os
+from os
 
 
 app = Flask(__name__)
@@ -21,9 +22,12 @@ if os.getenv("AUTH_TYPE") == "auth":
 elif os.getenv("AUTH_TYPE") == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
-else:
+elif os.getenv("AUTH_TYPE") == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
+else:
+    from api.v1.auth.session_exp_auth import SessionExpAuth
+    auth = SessionExpAuth()
 
 
 @app.before_request
