@@ -24,7 +24,10 @@ class SessionExpAuth(SessionAuth):
     def create_session(self, user_id=None):
         """ create_session method
         """
-        session_id = super().create_session(user_id)
+        try:
+            session_id = super().create_session(user_id)
+        except Exception:
+            return None
         if session_id is None:
             return None
         self.user_id_by_session_id[session_id] = {
@@ -38,7 +41,10 @@ class SessionExpAuth(SessionAuth):
         """
         if session_id is None:
             return None
-        session_dict = self.user_id_by_session_id.get(session_id)
+        try:
+            session_dict = self.user_id_by_session_id.get(session_id)
+        except Exception:
+            return None
         if session_dict is None:
             return None
         if self.session_duration <= 0:
