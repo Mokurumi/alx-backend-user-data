@@ -8,7 +8,6 @@ from flask import jsonify, request, abort
 from api.v1.views import app_views
 from models.user import User
 from os import getenv
-# from api.v1.auth import auth
 from typing import Tuple
 
 
@@ -40,13 +39,14 @@ def auth_session_login():
     return response
 
 
-# @app_views.route('/auth_session/logout', methods=['DELETE'],
-#                  strict_slashes=False)
-# def auth_session_logout() -> Tuple:
-#     """ DELETE /auth_session/logout
-#     Return:
-#       - an empty JSON dictionary with the status code 200
-#     """
-#     if not auth.destroy_session(request):
-#         abort(404)
-#     return jsonify({}), 200
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def auth_session_logout() -> Tuple[str, int]:
+    """ DELETE /auth_session/logout
+    Return:
+      - an empty JSON dictionary with the status code 200
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
