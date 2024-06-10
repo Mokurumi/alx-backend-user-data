@@ -1,16 +1,6 @@
 #!/usr/bin/env python3
 '''
-This module contains the function filter_datum
-
-Use user_data.csv for this task
-
-Implement a get_logger function that takes no arguments and returns a logging.Logger object.
-
-The logger should be named "user_data" and only log up to logging.INFO level. It should not propagate messages to other loggers. It should have a StreamHandler with RedactingFormatter as formatter.
-
-Create a tuple PII_FIELDS constant at the root of the module containing the fields from user_data.csv that are considered PII. PII_FIELDS can contain only 5 fields - choose the right list of fields that can are considered as “important” PIIs or information that you must hide in your logs. Use it to parameterize the formatter.
-
-
+filtered_logger.py
 '''
 
 
@@ -18,6 +8,7 @@ import re
 from typing import List
 import logging
 import os
+import mysql.connector
 
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -67,3 +58,20 @@ def get_logger() -> logging.Logger:
     ch.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(ch)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    Returns a connector to the database
+    """
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+
+    return mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=db_name
+    )
