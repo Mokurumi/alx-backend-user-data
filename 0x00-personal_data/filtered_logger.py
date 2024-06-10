@@ -74,3 +74,25 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=host,
         database=db_name
     )
+
+
+def main():
+    """
+    Main function
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    for row in cursor:
+        msg = ""
+        for i in range(len(row)):
+            msg += f"{PII_FIELDS[i]}={row[i]}; "
+        logger.info(msg)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    """ Main method """
+    main()
