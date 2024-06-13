@@ -91,6 +91,7 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
 
 
 if __name__ == "__main__":
+    """Main"""
     register_user(EMAIL, PASSWD)
     log_in_wrong_password(EMAIL, NEW_PASSWD)
     profile_unlogged()
