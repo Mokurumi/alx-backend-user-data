@@ -54,12 +54,14 @@ class DB:
         session = self._session
         query = session.query(User)
         try:
-            user = query.filter_by(**kwargs).one()
+            user = query.filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound()
+            return user
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
             raise InvalidRequestError()
-        return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
