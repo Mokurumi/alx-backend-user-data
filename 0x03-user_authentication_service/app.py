@@ -71,5 +71,17 @@ def profile() -> str:
     return jsonify({"email": user.email}), 200
 
 
+@app.route('/reset_password', methods=['POST'])
+def get_reset_password_token() -> str:
+    """Reset password endpoint
+    """
+    email = request.form.get('email')
+    try:
+        user = AUTH.get_reset_password_token(email)
+        return jsonify({"email": user.email, "reset_token": user.reset_token})
+    except ValueError:
+        return jsonify({"message": "email not registered"}), 403
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
