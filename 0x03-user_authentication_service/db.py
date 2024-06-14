@@ -37,14 +37,17 @@ class DB:
         """
         Add a user to the database
         """
-        new_user = User(email=email, hashed_password=hashed_password)
-        session = self._session  # get the session
         try:
-            session.add(new_user)
-            session.commit()
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._session.add(new_user)
+            self._session.commit()
+            # Ensure the user object is refreshed from the database
+            self._session.refresh(new_user)
         except Exception as e:
-            session.rollback()
-            raise e
+            self._session.rollback()
+            new_user = None
+        finally:
+            self._session.close()
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
