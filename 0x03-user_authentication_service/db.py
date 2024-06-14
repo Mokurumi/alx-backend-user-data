@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-
 from user import Base, User
 
 
@@ -48,6 +47,7 @@ class DB:
             new_user = None
         finally:
             self._session.close()
+            self.__session = None  # Ensure the session is reset
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
